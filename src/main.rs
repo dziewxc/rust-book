@@ -12,6 +12,28 @@ struct Rectangle {
     height: u32
 }
 
+impl Rectangle {
+    fn area(&self) -> u32 { //method
+        self.width * self.height
+    }
+
+    fn can_hold(&self, second_rectangle: &Rectangle) -> bool {
+        self.height >= second_rectangle.height && self.width >= second_rectangle.width
+    }
+
+    //associated function (static)
+    fn square(size: u32) -> Rectangle {
+        Rectangle {
+            height: size,
+            width: size,
+        }
+    }
+}
+
+//Having a method that takes ownership of the instance by using just self as the first parameter is rare;
+// this technique is usually used when the method transforms self into something else and you want to prevent
+// the caller from using the original instance after the transformation.
+
 fn main() {
     let mut shorts1 = Shorts {
         color: String::from("blue"),
@@ -99,7 +121,24 @@ fn rectangle_project() {
 
     //debug print format, needs debug derive {:?}
     println!("take a look at this weird struct right here: {:?}", rect3);
-    println!("a little prettier print: {:#?}", rect3)
+    println!("a little prettier print: {:#?}", rect3);
+
+    let area_from_method = rect3.area();
+
+    println!("area calculated within a method: {}", area_from_method);
+
+    let smol_rectangle = Rectangle {
+        width: 5,
+        height: 5
+    };
+
+    let can_hold = smol_rectangle.can_hold(&rect3);
+
+    println!("Smol rectangle can hold big one? hell no!: {}", can_hold);
+    println!("But big one can hold smol, right? right?: {}", rect3.can_hold(&smol_rectangle));
+
+    let square1 = Rectangle::square(5);
+    println!("Debug info about new smol square: {:#?}", square1)
 }
 
 fn calculate_area(width: u32, height: u32) -> u32 {
