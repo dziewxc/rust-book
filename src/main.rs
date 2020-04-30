@@ -1,7 +1,65 @@
-fn main() {
-    unimplemented!();
+use std::io;
+
+struct Shorts {
+    color: String,
+    brand: String,
+    rating: u8
 }
 
-fn function() {
-    unimplemented!();
+fn main() {
+    let mut shorts1 = Shorts {
+        color: String::from("blue"),
+        brand: String::from("C&A"),
+        rating: 1
+    };
+
+    let mut user_rating = String::new();
+
+    io::stdin()
+        .read_line(&mut user_rating)
+        .expect("wrong input");
+
+    shorts1.rating = user_rating.trim().parse::<u8>().unwrap();
+
+    println!("rating of the shorts: {}", shorts1.rating);
+
+    let new_shorts = build_some_shorts(String::from("red"), String::from("H&M"));
+
+    println!("New shorts have color: {} and brand: {}", new_shorts.color, new_shorts.brand);
+
+    let shorts3 = Shorts {
+        color: String::from("yellow"),
+        ..new_shorts //struct update syntax
+    };
+
+    println!("Shorts 3 inherit brand and rate from shorts 2: brand - {}", shorts3.brand);
+
+    //tuple structs
+
+    struct ShirtColor(i32, i32, i32);
+
+    struct Shirt {
+        shirt_color: ShirtColor,
+        shirt_brand: String
+    }
+
+    let shirt = Shirt {
+        shirt_color: ShirtColor(1, 1, 1),
+        shirt_brand:  String::from("Mohito")
+    };
+
+    println!("this is my new shirt, its color is: {}", shirt.shirt_color.0);
+
+/*    struct Shoe {
+        size: u8,
+        brand: &str //missing lifetime specifier!
+    }*/
+}
+
+fn build_some_shorts(color: String, brand: String) -> Shorts {
+    Shorts {
+        color, //field init shorthand
+        brand,
+        rating: 0
+    }
 }
